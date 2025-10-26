@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="EX2.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Горнозаводские корни Белорецка"
+             BackgroundColor="#F8F9FA">
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*,Auto" 
+              RowSpacing="25"
+              Padding="25">
+            
+            <!-- Заголовок с градиентом -->
+            <Border Grid.Row="0" 
+                   Background="#2C5530"
+                   Stroke="Transparent"
+                   StrokeThickness="0"
+                   StrokeShape="RoundRectangle 20"
+                   Padding="25,30"
+                   HorizontalOptions="Fill">
+                <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                    <Label Text="🏭" 
+                           FontSize="45"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Горнозаводские корни Белорецка" 
+                           FontSize="22" 
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalTextAlignment="Center"/>
+                    <Label Text="Историографика и цифровые связи" 
+                           FontSize="16" 
+                           TextColor="#E8F5E8"
+                           HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Навигационные карточки -->
+            <Grid Grid.Row="1" 
+                  RowDefinitions="*,*,*" 
+                  ColumnDefinitions="*,*"
+                  RowSpacing="15"
+                  ColumnSpacing="15"
+                  VerticalOptions="Center">
+                
+                <!-- Заводы -->
+                <Border Grid.Row="0" Grid.Column="0"
+                       Background="#FFFFFF"
+                       Stroke="#E0E0E0"
+                       StrokeThickness="1"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="20"
+                       HeightRequest="120">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                        <Border Background="#2C5530" 
+                               WidthRequest="50"
+                               HeightRequest="50"
+                               StrokeShape="RoundRectangle 12"
+                               VerticalOptions="Center">
+                            <Label Text="🏭" 
+                                   FontSize="20"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label Text="Заводы" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#2C5530"/>
+                            <Label Text="Металлургические предприятия"
+                                   FontSize="12"
+                                   TextColor="#666666"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFactoriesClicked"/>
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="#40000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.1"/>
+                    </Border.Shadow>
+                </Border>
+
+                <!-- Персоналии -->
+                <Border Grid.Row="0" Grid.Column="1"
+                       Background="#FFFFFF"
+                       Stroke="#E0E0E0"
+                       StrokeThickness="1"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="20"
+                       HeightRequest="120">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                        <Border Background="#2C5530" 
+                               WidthRequest="50"
+                               HeightRequest="50"
+                               StrokeShape="RoundRectangle 12"
+                               VerticalOptions="Center">
+                            <Label Text="👥" 
+                                   FontSize="20"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label Text="Персоналии" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#2C5530"/>
+                            <Label Text="Владельцы и управляющие"
+                                   FontSize="12"
+                                   TextColor="#666666"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPersonsClicked"/>
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="#40000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.1"/>
+                    </Border.Shadow>
+                </Border>
+
+                <!-- Граф связей -->
+                <Border Grid.Row="1" Grid.Column="0"
+                       Background="#FFFFFF"
+                       Stroke="#E0E0E0"
+                       StrokeThickness="1"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="20"
+                       HeightRequest="120">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                        <Border Background="#2C5530" 
+                               WidthRequest="50"
+                               HeightRequest="50"
+                               StrokeShape="RoundRectangle 12"
+                               VerticalOptions="Center">
+                            <Label Text="🔗" 
+                                   FontSize="20"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label Text="Граф связей" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#2C5530"/>
+                            <Label Text="Визуализация отношений"
+                                   FontSize="12"
+                                   TextColor="#666666"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnGraphClicked"/>
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="#40000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.1"/>
+                    </Border.Shadow>
+                </Border>
+
+                <!-- Хронология -->
+                <Border Grid.Row="1" Grid.Column="1"
+                       Background="#FFFFFF"
+                       Stroke="#E0E0E0"
+                       StrokeThickness="1"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="20"
+                       HeightRequest="120">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                        <Border Background="#2C5530" 
+                               WidthRequest="50"
+                               HeightRequest="50"
+                               StrokeShape="RoundRectangle 12"
+                               VerticalOptions="Center">
+                            <Label Text="📅" 
+                                   FontSize="20"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label Text="Хронология" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#2C5530"/>
+                            <Label Text="Исторические периоды"
+                                   FontSize="12"
+                                   TextColor="#666666"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTimelineClicked"/>
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="#40000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.1"/>
+                    </Border.Shadow>
+                </Border>
+
+                <!-- Галерея -->
+                <Border Grid.Row="2" Grid.Column="0"
+                       Background="#FFFFFF"
+                       Stroke="#E0E0E0"
+                       StrokeThickness="1"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="20"
+                       HeightRequest="120">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                        <Border Background="#2C5530" 
+                               WidthRequest="50"
+                               HeightRequest="50"
+                               StrokeShape="RoundRectangle 12"
+                               VerticalOptions="Center">
+                            <Label Text="🖼️" 
+                                   FontSize="20"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label Text="Галерея" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#2C5530"/>
+                            <Label Text="Архивные материалы"
+                                   FontSize="12"
+                                   TextColor="#666666"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnGalleryClicked"/>
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="#40000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.1"/>
+                    </Border.Shadow>
+                </Border>
+
+                <!-- ИИ-визуализация -->
+                <Border Grid.Row="2" Grid.Column="1"
+                       Background="#FFFFFF"
+                       Stroke="#E0E0E0"
+                       StrokeThickness="1"
+                       StrokeShape="RoundRectangle 15"
+                       Padding="20"
+                       HeightRequest="120">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                        <Border Background="#2C5530" 
+                               WidthRequest="50"
+                               HeightRequest="50"
+                               StrokeShape="RoundRectangle 12"
+                               VerticalOptions="Center">
+                            <Label Text="🤖" 
+                                   FontSize="20"
+                                   TextColor="White"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"/>
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Label Text="ИИ-визуализация" 
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#2C5530"/>
+                            <Label Text="Нейросетевые образы"
+                                   FontSize="12"
+                                   TextColor="#666666"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAIClicked"/>
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="#40000000"
+                                Offset="0,2"
+                                Radius="8"
+                                Opacity="0.1"/>
+                    </Border.Shadow>
+                </Border>
+
+            </Grid>
+
+            <!-- Информация о проекте -->
+            <Border Grid.Row="2" 
+                   Background="#FFFFFF"
+                   Stroke="#E0E0E0"
+                   StrokeThickness="1"
+                   StrokeShape="RoundRectangle 15"
+                   Padding="20">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="📖 О проекте" 
+                           FontSize="16" 
+                           FontAttributes="Bold" 
+                           TextColor="#2C5530"/>
+                    <Label Text="Историографическое и оцифрованное описание металлургических заводов и рудников Белорецкого района. Сохранение индустриального наследия Южного Урала."
+                           FontSize="13"
+                           TextColor="#666666"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Label Grid.Column="0" 
+                               Text="🏭 13 предприятий"
+                               FontSize="12"
+                               TextColor="#2C5530"/>
+                        <Label Grid.Column="1" 
+                               Text="👥 50+ персоналий" 
+                               FontSize="12"
+                               TextColor="#2C5530"/>
+                    </Grid>
+                </VerticalStackLayout>
+                <Border.Shadow>
+                    <Shadow Brush="#20000000"
+                            Offset="0,1"
+                            Radius="4"
+                            Opacity="0.05"/>
+                </Border.Shadow>
+            </Border>
+
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

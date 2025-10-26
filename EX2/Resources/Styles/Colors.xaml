@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Цветовая схема в стиле металлургии/индустриальной тематики -->
+    <Color x:Key="PrimaryDark">#2C5530</Color>
+    <!-- Темно-зеленый -->
+    <Color x:Key="PrimaryMedium">#5B8C5A</Color>
+    <!-- Зеленый -->
+    <Color x:Key="PrimaryLight">#8FB996</Color>
+    <!-- Светло-зеленый -->
+    <Color x:Key="Accent">#C8E087</Color>
+    <!-- Акцентный -->
+    <Color x:Key="TextDark">#1A1A1A</Color>
+    <!-- Темный текст -->
+    <Color x:Key="BackgroundLight">#F5F5F5</Color>
+    <!-- Светлый фон -->
+
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource TextDark}"/>
+    </Style>
+
+    <Style TargetType="Frame">
+        <Setter Property="BorderColor" Value="{DynamicResource PrimaryLight}"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="HasShadow" Value="True"/>
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="15,10"/>
+    </Style>
+
+</ResourceDictionary>

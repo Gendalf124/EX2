@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="EX2.GraphPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:EX2.ViewModels"
+             xmlns:models="clr-namespace:EX2.Models"
+             Title="🏭 Граф исторических связей Белорецка"
+             BackgroundColor="#F8FAFC">
+
+    <Grid RowDefinitions="Auto,*,Auto" 
+          ColumnDefinitions="*,400"
+          RowSpacing="0"
+          ColumnSpacing="0"
+          Padding="0">
+
+        <!-- Верхняя панель с информацией -->
+        <Border Grid.Row="0" 
+                Grid.ColumnSpan="2"
+                Background="#0F172A"
+                Stroke="Transparent"
+                StrokeThickness="0"
+                Padding="20,15">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="15">
+                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="🏭 Граф исторических связей Белорецка" 
+                           FontSize="20" 
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="Визуализация отношений между заводами, владельцами и управляющими" 
+                           FontSize="12" 
+                           TextColor="#94A3B8"/>
+                </VerticalStackLayout>
+                
+                <!-- Статистика -->
+                <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                    <Border Background="#1E293B"
+                           Stroke="#334155"
+                           StrokeThickness="1"
+                           StrokeShape="RoundRectangle 12"
+                           Padding="12,6">
+                        <Label Text="{Binding NodesCount, StringFormat='{}👤 {0} объектов'}" 
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#E2E8F0"/>
+                    </Border>
+                    <Border Background="#1E293B"
+                           Stroke="#334155"
+                           StrokeThickness="1"
+                           StrokeShape="RoundRectangle 12"
+                           Padding="12,6">
+                        <Label Text="{Binding LinksCount, StringFormat='{}🔗 {0} связей'}" 
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#E2E8F0"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Управление -->
+                <HorizontalStackLayout Grid.Column="2" Spacing="8" VerticalOptions="Center">
+                    <Button Text="🔄" 
+                            BackgroundColor="#3B82F6"
+                            TextColor="White"
+                            CornerRadius="10"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Clicked="OnRefreshClicked"/>
+                    <Button Text="🎯" 
+                            BackgroundColor="#10B981"
+                            TextColor="White"
+                            CornerRadius="10"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Clicked="OnShowAllClicked"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Основное содержимое -->
+        <Grid Grid.Row="1" Grid.ColumnSpan="2"
+              ColumnDefinitions="*,400"
+              Padding="15"
+              RowSpacing="15"
+              ColumnSpacing="15">
+
+            <!-- Левая панель - Граф -->
+            <Border Grid.Column="0"
+                   Background="White"
+                   Stroke="#E2E8F0"
+                   StrokeThickness="1"
+                   StrokeShape="RoundRectangle 12"
+                   Padding="0">
+                <Grid RowDefinitions="Auto,*,Auto">
+
+                    <!-- Панель фильтров -->
+                    <Border Grid.Row="0"
+                           Background="#F8FAFC"
+                           Stroke="Transparent"
+                           StrokeThickness="0"
+                           StrokeShape="RoundRectangle 12,12,0,0"
+                           Padding="15,10">
+                        <HorizontalStackLayout Spacing="10">
+                            <Border Background="White"
+                                   Stroke="#E2E8F0"
+                                   StrokeThickness="1"
+                                   StrokeShape="RoundRectangle 8"
+                                   Padding="0">
+                                <Picker x:Name="FilterPicker"
+                                        Title="🔍 Фильтр по типу..."
+                                        WidthRequest="200"
+                                        BackgroundColor="Transparent"
+                                        TextColor="#0F172A"
+                                        ItemsSource="{Binding FilterOptions}"/>
+                            </Border>
+                            
+                            <Border Background="White"
+                                   Stroke="#E2E8F0"
+                                   StrokeThickness="1"
+                                   StrokeShape="RoundRectangle 8"
+                                   Padding="0">
+                                <Picker x:Name="TimePeriodPicker"
+                                        Title="📅 Период..."
+                                        WidthRequest="180"
+                                        BackgroundColor="Transparent"
+                                        TextColor="#0F172A"
+                                        ItemsSource="{Binding TimePeriods}"/>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Область графа -->
+                    <ScrollView Grid.Row="1" 
+                               Padding="20">
+                        <Grid x:Name="GraphContainer" 
+                              BackgroundColor="#F8FAFC"
+                              WidthRequest="600"
+                              HeightRequest="500">
+
+                            <!-- Сетка фона -->
+                            <BoxView Color="#F1F5F9"/>
+                            
+                            <!-- Контейнер для узлов -->
+                            <FlexLayout x:Name="NodesContainer"
+                                      BindableLayout.ItemsSource="{Binding GraphNodes}"
+                                      JustifyContent="Center"
+                                      AlignItems="Center"
+                                      Wrap="Wrap">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="models:GraphNode">
+                                        <Border BackgroundColor="{Binding Color}"
+                                               Stroke="White"
+                                               StrokeThickness="2"
+                                               StrokeShape="RoundRectangle 100"
+                                               WidthRequest="{Binding Size}"
+                                               HeightRequest="{Binding Size}"
+                                               Margin="20">
+                                            <Border.Shadow>
+                                                <Shadow Brush="#00000030"
+                                                        Offset="2,2"
+                                                        Radius="8"
+                                                        Opacity="0.2"/>
+                                            </Border.Shadow>
+                                            <VerticalStackLayout HorizontalOptions="Center" 
+                                                               VerticalOptions="Center"
+                                                               Spacing="2"
+                                                               Padding="8,4">
+                                                <Label Text="{Binding Icon}" 
+                                                       FontSize="12"
+                                                       HorizontalOptions="Center"
+                                                       TextColor="White"/>
+                                                <Label Text="{Binding Label}" 
+                                                       FontSize="9"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White"
+                                                       HorizontalOptions="Center"
+                                                       HorizontalTextAlignment="Center"
+                                                       LineBreakMode="TailTruncation"
+                                                       MaxLines="2"/>
+                                            </VerticalStackLayout>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnNodeTapped"/>
+                                            </Border.GestureRecognizers>
+                                        </Border>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+
+                        </Grid>
+                    </ScrollView>
+
+                    <!-- Легенда и информация -->
+                    <Border Grid.Row="2"
+                           Background="#F1F5F9"
+                           Stroke="Transparent"
+                           StrokeThickness="0"
+                           StrokeShape="RoundRectangle 0,0,12,12"
+                           Padding="15,10">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                            <HorizontalStackLayout Grid.Column="0" Spacing="15">
+                                <HorizontalStackLayout Spacing="6">
+                                    <BoxView Color="#DC2626" WidthRequest="10" HeightRequest="10" 
+                                           VerticalOptions="Center" CornerRadius="5"/>
+                                    <Label Text="Основатели" FontSize="10" TextColor="#475569"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="6">
+                                    <BoxView Color="#059669" WidthRequest="10" HeightRequest="10" 
+                                           VerticalOptions="Center" CornerRadius="5"/>
+                                    <Label Text="Владельцы" FontSize="10" TextColor="#475569"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="6">
+                                    <BoxView Color="#3B82F6" WidthRequest="10" HeightRequest="10" 
+                                           VerticalOptions="Center" CornerRadius="5"/>
+                                    <Label Text="Управляющие" FontSize="10" TextColor="#475569"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="6">
+                                    <BoxView Color="#7C3AED" WidthRequest="10" HeightRequest="10" 
+                                           VerticalOptions="Center" CornerRadius="5"/>
+                                    <Label Text="Заводы" FontSize="10" TextColor="#475569"/>
+                                </HorizontalStackLayout>
+                            </HorizontalStackLayout>
+                            
+                            <Label Grid.Column="1" 
+                                   Text="{Binding SelectedNodeInfo}" 
+                                   FontSize="10"
+                                   TextColor="#64748B"
+                                   HorizontalOptions="End"/>
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <!-- Правая панель - Детали -->
+            <Border Grid.Column="1"
+                   Background="White"
+                   Stroke="#E2E8F0"
+                   StrokeThickness="1"
+                   StrokeShape="RoundRectangle 12"
+                   Padding="0">
+                <Grid RowDefinitions="Auto,*,Auto">
+
+                    <!-- Заголовок -->
+                    <Border Grid.Row="0"
+                           Background="#0F172A"
+                           Stroke="Transparent"
+                           StrokeThickness="0"
+                           StrokeShape="RoundRectangle 12,12,0,0"
+                           Padding="15,12">
+                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                            <Label Text="📊" FontSize="16"/>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Детали связей" 
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       TextColor="White"/>
+                                <Label Text="{Binding FactsCount, StringFormat='{}Фактов: {0}'}" 
+                                       FontSize="10"
+                                       TextColor="#94A3B8"/>
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Список фактов -->
+                    <CollectionView Grid.Row="1"
+                                  x:Name="FactsCollectionView"
+                                  ItemsSource="{Binding HistoricalFacts}"
+                                  SelectionMode="Single">
+                        <CollectionView.EmptyView>
+                            <VerticalStackLayout HorizontalOptions="Center" 
+                                               VerticalOptions="Center"
+                                               Spacing="10"
+                                               Padding="20">
+                                <Label Text="📝" 
+                                       FontSize="24"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Выберите узел для просмотра связей" 
+                                       FontSize="12"
+                                       TextColor="#64748B"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"/>
+                            </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="8"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:HistoricalFact">
+                                <Border Background="#F8FAFC"
+                                       Stroke="#E2E8F0"
+                                       StrokeThickness="1"
+                                       StrokeShape="RoundRectangle 8"
+                                       Margin="10,0,10,0"
+                                       Padding="0">
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                          ColumnDefinitions="*,Auto"
+                                          Padding="12">
+                                        
+                                        <!-- Факт и период -->
+                                        <Label Grid.Row="0" Grid.Column="0"
+                                               Text="{Binding Fact}" 
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               TextColor="#0F172A"
+                                               LineBreakMode="WordWrap"/>
+                                        
+                                        <Border Grid.Row="0" Grid.Column="1"
+                                               Background="#DBEAFE"
+                                               Stroke="Transparent"
+                                               StrokeThickness="0"
+                                               StrokeShape="RoundRectangle 8"
+                                               Padding="6,2">
+                                            <Label Text="{Binding StartYear, StringFormat='{}📅 {0}'}" 
+                                                   FontSize="9"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#1E40AF"/>
+                                        </Border>
+                                        
+                                        <!-- Субъекты -->
+                                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                               Text="{Binding Subjects}" 
+                                               FontSize="10"
+                                               TextColor="#475569"
+                                               Margin="0,4,0,0"/>
+                                        
+                                        <!-- Тип связи -->
+                                        <HorizontalStackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                             Spacing="6" Margin="0,4,0,0">
+                                            <Border Background="#F0FDF4"
+                                                   Stroke="Transparent"
+                                                   StrokeThickness="0"
+                                                   StrokeShape="RoundRectangle 6"
+                                                   Padding="4,2">
+                                                <Label Text="{Binding Object}" 
+                                                       FontSize="9"
+                                                       TextColor="#166534"/>
+                                            </Border>
+                                            <Border Background="#FEF7CD"
+                                                   Stroke="Transparent"
+                                                   StrokeThickness="0"
+                                                   StrokeShape="RoundRectangle 6"
+                                                   Padding="4,2">
+                                                <Label Text="{Binding RelationType}" 
+                                                       FontSize="9"
+                                                       TextColor="#854D0E"/>
+                                            </Border>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Место -->
+                                        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                               Text="{Binding Location, StringFormat='{}📍 {0}'}" 
+                                               FontSize="9"
+                                               TextColor="#64748B"
+                                               Margin="0,4,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- Действия -->
+                    <Border Grid.Row="2"
+                           Background="#F8FAFC"
+                           Stroke="Transparent"
+                           StrokeThickness="0"
+                           StrokeShape="RoundRectangle 0,0,12,12"
+                           Padding="15,10">
+                        <HorizontalStackLayout Spacing="8" HorizontalOptions="Fill">
+                            <Button Text="📤 Экспорт"
+                                    BackgroundColor="#475569"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    FontSize="11"
+                                    Padding="12,8"
+                                    Clicked="OnExportClicked"
+                                    HorizontalOptions="FillAndExpand"/>
+                            
+                            <Button Text="📊 Анализ"
+                                    BackgroundColor="#7C3AED"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    FontSize="11"
+                                    Padding="12,8"
+                                    Clicked="OnAnalyzeClicked"
+                                    HorizontalOptions="FillAndExpand"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <!-- Нижняя панель -->
+        <Border Grid.Row="2" Grid.ColumnSpan="2"
+               Background="#0F172A"
+               Stroke="Transparent"
+               StrokeThickness="0">
+            <Grid Padding="15,8">
+                <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                    <Label Text="🏭 Белорецкий металлургический комплекс • 1762-2024" 
+                           FontSize="10"
+                           TextColor="#94A3B8"/>
+                    <BoxView Color="#334155" WidthRequest="1" HeightRequest="10" VerticalOptions="Center"/>
+                    <Label Text="🔗 Интерактивная историография" 
+                           FontSize="10"
+                           TextColor="#94A3B8"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</ContentPage>
