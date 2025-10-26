@@ -26,9 +26,9 @@ namespace EX2
 
         private async void OnTimelineClicked(object sender, System.EventArgs e)
         {
-            await DisplayAlert("Хронология", "Переход к историческим периодам", "OK");
+            // Реальная навигация к новой странице "Хронология"
+            await Navigation.PushAsync(new TimelinePage());
         }
-
         private async void OnGalleryClicked(object sender, System.EventArgs e)
         {
             await DisplayAlert("Галерея", "Переход к архивным материалам", "OK");
@@ -38,6 +38,7 @@ namespace EX2
         {
             await DisplayAlert("ИИ-визуализация", "Переход к нейросетевым образам", "OK");
         }
+
 
     }
 }
